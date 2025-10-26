@@ -1,0 +1,66 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.7'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.investment'
+version = '0.0.1-SNAPSHOT'
+description = 'autotrade'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // 1. Google API 핵심 클라이언트 (Sheets API 1.25.0과 호환)
+    implementation 'com.google.api-client:google-api-client:1.25.0'
+
+    // 2. Google Sheets V4 서비스 라이브러리 (작동 확인된 버전)
+    implementation 'com.google.apis:google-api-services-sheets:v4-rev612-1.25.0'
+
+    // 3. 인증 라이브러리 (1.x 클라이언트와 호환되는 버전)
+    implementation 'com.google.auth:google-auth-library-oauth2-http:0.25.1'
+
+    // 4. JSON 파서 (***이 의존성이 JacksonFactory 심볼을 제공합니다.***)
+    implementation 'com.google.http-client:google-http-client-jackson2:1.25.0'
+    // ===============================================
+    // ★ 한국투자증권 API 연동을 위한 추가 의존성
+    // ===============================================
+
+    // 5. REST API 통신을 위한 Spring WebClient (권장) 또는 RestTemplate
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // 6. JSON 데이터 직렬화/역직렬화를 위한 Jackson 라이브러리 (Spring Boot 기본 포함되나 명시)
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    // 7. 실시간 시세 처리를 위한 WebSocket 클라이언트 (필요시)
+    // Spring WebFlux에 Netty가 포함되어 WebSocket 클라이언트 구현에 유리합니다.
+
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
