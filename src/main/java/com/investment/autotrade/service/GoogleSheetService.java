@@ -6,11 +6,13 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.investment.autotrade.common.Const;
 import com.investment.autotrade.dto.response.excel.Privacy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -19,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.investment.autotrade.common.Const.APPLICATION_NAME;
-import static com.investment.autotrade.common.Const.GOOGLE_SHEETS_SCOPE;
 
 
 @Slf4j
@@ -27,8 +28,10 @@ import static com.investment.autotrade.common.Const.GOOGLE_SHEETS_SCOPE;
 @RequiredArgsConstructor
 public class GoogleSheetService {
 
+    private final ResourceLoader resourceLoader; // ResourceLoader 주입
+
     @Value("${google.sheets.credentials-path}")
-    private String CREDENTIALS_FILE_NAME;
+    private String credentialsPath;
 
     @Value("${google.sheets.spreadsheet-id}")
     private String SPREADSHEET_ID;
@@ -44,10 +47,11 @@ public class GoogleSheetService {
      */
     private Sheets getSheetsService() throws IOException {
         // 시트 읽기/쓰기 권한(Scope) 정의
-        List<String> SCOPES = Collections.singletonList(GOOGLE_SHEETS_SCOPE);
+        List<String> SCOPES = Collections.singletonList(Const.GOOGLE_SHEETS_SCOPE);
 
-        // ClassPathResource를 사용하여 클래스패스(resources 폴더)에서 키 파일 로드
-        InputStream inputStream = new ClassPathResource(CREDENTIALS_FILE_NAME).getInputStream();
+        // Spring의 ResourceLoader를 사용하여 클래스패스 또는 파일 시스템에서 키 파일 로드
+        Resource resource = resourceLoader.getResource(credentialsPath);
+        InputStream inputStream = resource.getInputStream();
 
         // GoogleCredentials를 사용하여 서비스 계정 인증 정보를 생성하고 Scope를 적용
         GoogleCredentials credentials = GoogleCredentials.fromStream(inputStream)
