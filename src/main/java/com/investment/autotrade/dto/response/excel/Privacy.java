@@ -25,12 +25,12 @@ public class Privacy {
         var ticker = firstX.get(1).toString();
 
         List<OrderInfo> buyOrders = new ArrayList<>();
-        for (int i = 3; i < 6; i++) {
+        for (int i = 3; i < 6; i++) { // TODO 매수 갯수가 3개가 아닐 경우 index 오류
             buyOrders.add(setOrderFromExcel(ticker, dataXy.get(i)));
         }
 
         List<OrderInfo> sellOrders = new ArrayList<>();
-        for (int i = 6; i < 9; i++) {
+        for (int i = 6; i < 9; i++) { // TODO 매도 갯수가 3개가 아닐 경우 index 오류
             sellOrders.add(setOrderFromExcel(ticker, dataXy.get(i)));
         }
 
