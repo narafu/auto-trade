@@ -35,7 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
-settings.gradle
 
 # Secret properties
 application-secret.properties
