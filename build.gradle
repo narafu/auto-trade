@@ -29,6 +29,13 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
+    // Spring Boot Actuator
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+
+    // ===============================================
+    // ★ GoogleSheet API 연동을 위한 추가 의존성
+    // ===============================================
+
     // 1. Google API 핵심 클라이언트 (Sheets API 1.25.0과 호환)
     implementation 'com.google.api-client:google-api-client:1.25.0'
 
@@ -40,6 +47,7 @@ dependencies {
 
     // 4. JSON 파서 (***이 의존성이 JacksonFactory 심볼을 제공합니다.***)
     implementation 'com.google.http-client:google-http-client-jackson2:1.25.0'
+
     // ===============================================
     // ★ 한국투자증권 API 연동을 위한 추가 의존성
     // ===============================================
