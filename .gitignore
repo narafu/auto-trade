@@ -39,3 +39,5 @@ out/
 # Secret properties
 application-secret.properties
 src/main/resources/service-account-key.json
+src/test/resources/application-secret-test.properties
+src/main/resources/application-local.properties

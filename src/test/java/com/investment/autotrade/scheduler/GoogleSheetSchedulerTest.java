@@ -18,16 +18,16 @@ class GoogleSheetSchedulerTest {
 
     @Test
     void executeScheduledTasks() {
-        var readRange = "Privacy!A1:C9";
+        var readRange = "Privacy!A1:D10";
         var data = sheetService.getPrivacyExcel(readRange);
 
-        for (OrderInfo buyOrder : data.getBuyOrders()) {
-            OverseasOrder result = kisTradingService.sendOverseasOrder(buyOrder, true);
+        for (OrderInfo buyOrder : data.getOrders()) {
+            OverseasOrder result = kisTradingService.sendOverseasOrder(buyOrder);
             System.out.println("result = " + result);
         }
 
         for (OrderInfo sellOrder : data.getSellOrders()) {
-            OverseasOrder result = kisTradingService.sendOverseasOrder(sellOrder, false);
+            OverseasOrder result = kisTradingService.sendOverseasOrder(sellOrder);
             System.out.println("result = " + result);
         }
     }

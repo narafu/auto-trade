@@ -8,6 +8,7 @@ import com.investment.autotrade.dto.response.kis.OverseasOrder;
 import com.investment.autotrade.dto.response.kis.OverseasPsamount;
 import com.investment.autotrade.enums.ExchangeCode;
 import com.investment.autotrade.enums.OrderType;
+import com.investment.autotrade.enums.TradeType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -104,41 +105,41 @@ public class KisTradingService {
      * @return 주문 응답 JSON
      */
     public OverseasOrder sendOverseasOrder(ExchangeCode exchangeCode, String stockCode, int quantity, String price,
-            boolean isBuy, OrderType orderType) {
-        String orderTypeName = isBuy ? "매수" : "매도";
+                                           TradeType tradeType, OrderType orderType) {
+        boolean isBuy = tradeType.equals(TradeType.BUY);
         String trId = exchangeCode.getTrId(isBuy);
 
         // 요청 본문 생성 (JSON 형식)
         String requestBody = String.format("""
-                {
-                    "CANO": "%s",
-                    "ACNT_PRDT_CD": "%s",
-                    "OVRS_EXCG_CD": "%s",
-                    "PDNO": "%s",
-                    "ORD_QTY": "%d",
-                    "OVRS_ORD_UNPR": "%s",
-                    "CTAC_TLNO": "",
-                    "MGCO_APTM_ODNO": "",
-                    "SLL_TYPE": "%s",
-                    "ORD_SVR_DVSN_CD": "0",
-                    "ORD_DVSN": "%s"
-                }
-                """, accountNumber, accountProductCode, exchangeCode.getCode(), stockCode, quantity, price,
+                        {
+                            "CANO": "%s",
+                            "ACNT_PRDT_CD": "%s",
+                            "OVRS_EXCG_CD": "%s",
+                            "PDNO": "%s",
+                            "ORD_QTY": "%d",
+                            "OVRS_ORD_UNPR": "%s",
+                            "CTAC_TLNO": "",
+                            "MGCO_APTM_ODNO": "",
+                            "SLL_TYPE": "%s",
+                            "ORD_SVR_DVSN_CD": "0",
+                            "ORD_DVSN": "%s"
+                        }
+                        """, accountNumber, accountProductCode, exchangeCode.getCode(), stockCode, quantity, price,
                 isBuy ? "" : "00", orderType.getCode());
 
         String operation = String.format("Overseas %s Order for %s (%s, Qty: %d, Price: %s, OrderType: %s)",
-                orderTypeName, stockCode, exchangeCode, quantity, price, orderType);
+                tradeType.getCode(), stockCode, exchangeCode, quantity, price, orderType);
 
         var result = kisApiClient.performPostRequest(Const.OVERSEAS_ORDER_URI, trId, requestBody, operation);
         return OverseasOrder.from(result);
     }
 
-    public OverseasOrder sendOverseasOrder(OrderInfo orderInfo, boolean isBuy) {
+    public OverseasOrder sendOverseasOrder(OrderInfo orderInfo) {
         return sendOverseasOrder(ExchangeCode.AMEX,
                 orderInfo.getTicker(),
                 orderInfo.getQuantity(),
                 String.valueOf(orderInfo.getPrice()),
-                isBuy,
+                orderInfo.getTradeType(),
                 orderInfo.getOrderType());
     }
 }

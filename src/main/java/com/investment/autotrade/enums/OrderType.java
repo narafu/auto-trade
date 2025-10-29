@@ -39,18 +39,4 @@ public enum OrderType {
     private final String code;
     private final String description;
 
-    /**
-     * 코드로 OrderType을 찾습니다.
-     *
-     * @param code 주문구분 코드
-     * @return 해당하는 OrderType, 없으면 null
-     */
-    public OrderType fromCode(String code) {
-        for (OrderType orderType : values()) {
-            if (orderType.code.equals(code)) {
-                return orderType;
-            }
-        }
-        return null;
-    }
 }

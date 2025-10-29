@@ -4,6 +4,8 @@ import com.investment.autotrade.dto.OrderInfo;
 import com.investment.autotrade.dto.response.kis.OverseasOrder;
 import com.investment.autotrade.service.GoogleSheetService;
 import com.investment.autotrade.service.KisTradingService;
+import com.investment.autotrade.service.LogService;
+import com.investment.autotrade.service.TradeHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,6 +23,8 @@ public class GoogleSheetScheduler {
     private static final ZoneId NEW_YORK_ZONE = ZoneId.of("America/New_York");
     private final GoogleSheetService sheetService;
     private final KisTradingService kisTradingService;
+    private final LogService logService;
+    private final TradeHistoryService tradeHistoryService;
 
     /**
      * 미국 주식 시장 마감 30분 전부터 10분 간격으로 실행되는 스케줄러.
@@ -54,17 +58,12 @@ public class GoogleSheetScheduler {
      */
     private void executeScheduledTasks() {
         log.info("Reading data from Google Sheets...");
-        var readRange = "Privacy!A1:C9";
+        var readRange = "Privacy!A1:D10";
         var data = sheetService.getPrivacyExcel(readRange);
 
-        for (OrderInfo buyOrder : data.getBuyOrders()) {
-            OverseasOrder result = kisTradingService.sendOverseasOrder(buyOrder, true);
-            log.info("result = {}", result);
-        }
+        for (OrderInfo order : data.getOrders()) {
+            OverseasOrder result = kisTradingService.sendOverseasOrder(order);
 
-        for (OrderInfo sellOrder : data.getSellOrders()) {
-            // TODO quantity 0인 경우 남은 전부 매도 주문
-            OverseasOrder result = kisTradingService.sendOverseasOrder(sellOrder, false);
             log.info("result = {}", result);
         }
 

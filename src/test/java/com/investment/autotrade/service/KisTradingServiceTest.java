@@ -2,6 +2,7 @@ package com.investment.autotrade.service;
 
 import com.investment.autotrade.enums.ExchangeCode;
 import com.investment.autotrade.enums.OrderType;
+import com.investment.autotrade.enums.TradeType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,35 +30,35 @@ class KisTradingServiceTest {
     @Test
     void testOverseasOrder() {
         // 해외 주식 지정가 주문
-        var result = kisTradingService.sendOverseasOrder(ExchangeCode.AMEX, "SOXL", 1, "50.0", true, OrderType.LIMIT);
+        var result = kisTradingService.sendOverseasOrder(ExchangeCode.AMEX, "SOXL", 1, "50.0", TradeType.BUY, OrderType.LIMIT);
         System.out.println("result = " + result);
     }
 
     @Test
     void testOverseasLocOrder() {
         // 해외 주식 LOC(장마감지정가) 매수 주문
-        var result = kisTradingService.sendOverseasOrder(ExchangeCode.AMEX, "SOXL", 1, "50.0", true, OrderType.LOC);
+        var result = kisTradingService.sendOverseasOrder(ExchangeCode.AMEX, "SOXL", 1, "50.0", TradeType.BUY, OrderType.LOC);
         System.out.println("result = " + result);
     }
 
     @Test
     void testOverseasMooOrder() {
         // 해외 주식 MOO(장개시시장가) 매수 주문
-        var result = kisTradingService.sendOverseasOrder(ExchangeCode.AMEX, "SOXL", 1, "0", true, OrderType.MOO);
+        var result = kisTradingService.sendOverseasOrder(ExchangeCode.AMEX, "SOXL", 1, "0", TradeType.BUY, OrderType.MOO);
         System.out.println("result = " + result);
     }
 
     @Test
     void testOverseasLooOrder() {
         // 해외 주식 LOO(장개시지정가) 매수 주문
-        var result = kisTradingService.sendOverseasOrder(ExchangeCode.AMEX, "SOXL", 1, "50.0", true, OrderType.LOO);
+        var result = kisTradingService.sendOverseasOrder(ExchangeCode.AMEX, "SOXL", 1, "50.0", TradeType.BUY, OrderType.LOO);
         System.out.println("result = " + result);
     }
 
     @Test
     void testOverseasMocOrder() {
         // MOC(장마감시장가) 매수 주문
-        var result = kisTradingService.sendOverseasOrder(ExchangeCode.AMEX, "SOXL", 1, "0", true, OrderType.MOC);
+        var result = kisTradingService.sendOverseasOrder(ExchangeCode.AMEX, "SOXL", 1, "0", TradeType.BUY, OrderType.MOC);
         System.out.println("result = " + result);
     }
 
