@@ -45,12 +45,11 @@ public class KisTokenService {
      */
     public String getAccessToken() {
         // 토큰이 없거나, 만료 예정이라면 갱신 로직 실행
-//        if (accessToken.get() == null || isTokenExpiredOrExpiringSoon()) {
-//            log.info("KIS Access Token is expired or expiring soon. Attempting renewal...");
-//            issueToken(); // 동기적으로 토큰 발급/갱신 시도
-//        }
-//        return accessToken.get();
-        return "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b2tlbiIsImF1ZCI6ImVhMDc5NzQ4LTBkMmUtNDFmYy1hZDllLTUzY2RhM2IzYTI4OSIsInByZHRfY2QiOiIiLCJpc3MiOiJ1bm9ndyIsImV4cCI6MTc2MTQ4NDMzNSwiaWF0IjoxNzYxMzk3OTM1LCJqdGkiOiJQU3B5UHg1bmdSQWo2dW02aEJWRUxWM25VQXBWU1RBRDJkbFoifQ.KavMGg1r8oRvpxfElbYjArIpQo2ES_iU5AUqW5RHGltfGLY0vcaBMiaO6iTnFvttfpLpr9yeH48-OFJ-umkJdw";
+        if (accessToken.get() == null || isTokenExpiredOrExpiringSoon()) {
+            log.info("KIS Access Token is expired or expiring soon. Attempting renewal...");
+            issueToken(); // 동기적으로 토큰 발급/갱신 시도
+        }
+        return accessToken.get();
     }
 
     /**
