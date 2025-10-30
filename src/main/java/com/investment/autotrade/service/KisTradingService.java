@@ -108,24 +108,24 @@ public class KisTradingService {
                                            TradeType tradeType, OrderType orderType) {
         boolean isBuy = tradeType.equals(TradeType.BUY);
         String trId = exchangeCode.getTrId(isBuy);
+        String ordDvsn = isBuy ? "" : "00";
 
         // 요청 본문 생성 (JSON 형식)
         String requestBody = String.format("""
-                        {
-                            "CANO": "%s",
-                            "ACNT_PRDT_CD": "%s",
-                            "OVRS_EXCG_CD": "%s",
-                            "PDNO": "%s",
-                            "ORD_QTY": "%d",
-                            "OVRS_ORD_UNPR": "%s",
-                            "CTAC_TLNO": "",
-                            "MGCO_APTM_ODNO": "",
-                            "SLL_TYPE": "%s",
-                            "ORD_SVR_DVSN_CD": "0",
-                            "ORD_DVSN": "%s"
-                        }
-                        """, accountNumber, accountProductCode, exchangeCode.getCode(), stockCode, quantity, price,
-                isBuy ? "" : "00", orderType.getCode());
+                {
+                    "ORD_SVR_DVSN_CD": "0",
+                    "CANO": "%s",
+                    "ACNT_PRDT_CD": "%s",
+                    "ORD_DVSN": "%s",
+                    "OVRS_EXCG_CD": "%s",
+                    "PDNO": "%s",
+                    "OVRS_ORD_UNPR": "%s",
+                    "ORD_QTY": "%d",
+                    "SLL_TYPE": "%s",
+                    "CTAC_TLNO": "",
+                    "MGCO_APTM_ODNO": ""
+                }
+                """, accountNumber, accountProductCode, orderType.getCode(), exchangeCode.getCode(), stockCode, price, quantity, ordDvsn);
 
         String operation = String.format("Overseas %s Order for %s (%s, Qty: %d, Price: %s, OrderType: %s)",
                 tradeType.getCode(), stockCode, exchangeCode, quantity, price, orderType);

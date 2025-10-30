@@ -8,8 +8,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @ActiveProfiles("local")
 class GoogleSheetServiceTest {
@@ -37,4 +35,5 @@ class GoogleSheetServiceTest {
         List<List<Object>> newValue = List.of(List.of(true));
         sheetService.updateData(readRange, newValue);
     }
+
 }

@@ -100,14 +100,14 @@ public class GoogleSheetService {
      * 지정된 셀 또는 범위에 새로운 데이터를 덮어씁니다.
      *
      * @param rangeName 예: "Sheet1!C1"
-     * @param newValue  새로운 값 (List<List<Object>> 형태)
+     * @param value  새로운 값 (List<List<Object>> 형태)
      */
-    public void updateData(String rangeName, List<List<Object>> newValue) {
+    public void updateData(String rangeName, List<List<Object>> value) {
         try {
             Sheets sheetsService = getSheetsService();
 
             ValueRange body = new ValueRange()
-                    .setValues(newValue);
+                    .setValues(value);
 
             // API 호출
             sheetsService.spreadsheets().values()
@@ -120,5 +120,9 @@ public class GoogleSheetService {
         } catch (IOException e) {
             log.error("Error updating data. Check ID, Range, and Permissions: {}", e.getMessage());
         }
+    }
+
+    public void updateData(String rangeName, boolean value) {
+        updateData(rangeName, List.of(List.of(value)));
     }
 }

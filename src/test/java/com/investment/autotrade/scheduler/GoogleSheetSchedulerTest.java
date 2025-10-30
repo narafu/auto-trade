@@ -1,14 +1,15 @@
 package com.investment.autotrade.scheduler;
 
-import com.investment.autotrade.dto.OrderInfo;
 import com.investment.autotrade.dto.response.kis.OverseasOrder;
 import com.investment.autotrade.service.GoogleSheetService;
 import com.investment.autotrade.service.KisTradingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
+@ActiveProfiles("local")
 class GoogleSheetSchedulerTest {
 
     @Autowired
@@ -16,19 +17,24 @@ class GoogleSheetSchedulerTest {
     @Autowired
     KisTradingService kisTradingService;
 
+
     @Test
     void executeScheduledTasks() {
-        var readRange = "Privacy!A1:D10";
-        var data = sheetService.getPrivacyExcel(readRange);
+        System.out.println("Reading data from Google Sheets...");
+        var data = sheetService.getPrivacyExcel("Privacy!A1:D10");
 
-        for (OrderInfo buyOrder : data.getOrders()) {
-            OverseasOrder result = kisTradingService.sendOverseasOrder(buyOrder);
-            System.out.println("result = " + result);
+        if (data == null) {
+            return;
         }
 
-        for (OrderInfo sellOrder : data.getSellOrders()) {
-            OverseasOrder result = kisTradingService.sendOverseasOrder(sellOrder);
+        data.getOrders().forEach(order -> {
+            OverseasOrder result = kisTradingService.sendOverseasOrder(order);
+
             System.out.println("result = " + result);
-        }
+        });
+
+        sheetService.updateData("Privacy!D1", true);
+
+        System.out.println("Finished scheduled tasks.");
     }
 }

@@ -108,24 +108,25 @@ public class KisApiClient {
      * @return API 응답 JSON
      */
     public JsonNode performPostRequest(String uri, String trId, String requestBody, String operation) {
-        try {
-            log.info("Attempting to {}...", operation);
-            log.debug("Request body: {}", requestBody);
+//        try {
+        log.info("Attempting to {}...", operation);
+        log.debug("Request body: {}", requestBody);
 
-            JsonNode response = webClient.post()
-                    .uri(uri)
-                    .headers(httpHeaders -> httpHeaders.addAll(createCommonHeaders(trId)))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(BodyInserters.fromValue(requestBody))
-                    .retrieve()
-                    .bodyToMono(JsonNode.class)
-                    .block();
+        JsonNode response = webClient.post()
+                .uri(uri)
+                .headers(httpHeaders -> httpHeaders.addAll(createCommonHeaders(trId)))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(requestBody))
+                .retrieve()
+                .bodyToMono(JsonNode.class)
+                .block();
 
-            log.debug("{} response: {}", operation, response != null ? response.toPrettyString() : "null");
-            return processApiResponse(response, operation, operation);
-        } catch (Exception e) {
-            log.error("Exception during {}: {}", operation, e.getMessage());
-            return null;
-        }
+        log.debug("{} response: {}", operation, response != null ? response.toPrettyString() : "null");
+        return processApiResponse(response, operation, operation);
+
+//        } catch (Exception e) {
+//            log.error("Exception during {}: {}", operation, e.getMessage());
+//            return null;
+//        }
     }
 }

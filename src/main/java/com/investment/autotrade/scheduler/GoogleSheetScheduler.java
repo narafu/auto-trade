@@ -58,14 +58,19 @@ public class GoogleSheetScheduler {
      */
     private void executeScheduledTasks() {
         log.info("Reading data from Google Sheets...");
-        var readRange = "Privacy!A1:D10";
-        var data = sheetService.getPrivacyExcel(readRange);
+        var data = sheetService.getPrivacyExcel("Privacy!A1:D10");
+
+        if (data == null) {
+            return;
+        }
 
         for (OrderInfo order : data.getOrders()) {
             OverseasOrder result = kisTradingService.sendOverseasOrder(order);
 
             log.info("result = {}", result);
         }
+
+        sheetService.updateData( "Privacy!D1", true);
 
         log.info("Finished scheduled tasks.");
     }

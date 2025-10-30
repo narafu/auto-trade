@@ -24,5 +24,5 @@ public class Token {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Profile profile;
+    private User user;
 }

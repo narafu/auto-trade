@@ -21,7 +21,7 @@ public class TradeHistory extends BaseEntity {
 
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private Profile profile;
+    private User user;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
